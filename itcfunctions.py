@@ -2,12 +2,6 @@ import numpy as np
 from scipy.optimize import root
 
 
-##would love to remove this one day
-Kb = 0.001987
-T = 273.15 + 25
-V0 = 1.42e-3
-
-
 #make list of injections
 def get_injlist(injno,indiv_vol):
     injvol = [indiv_vol for i in range(injno)]
@@ -23,7 +17,7 @@ def find_p_l(variables,pt,lt,k1,k2):
         return abs(equation_1),abs(equation_2)
         
 ##take volumes, initial concs (P0, Ls in bayesitc terms), return list of total concentrations
-##this is stripped more or less directly from bayesitc but I've tested it and it is correct
+##this is stripped more or less directly from bayesitc (nguyen et. al, 2018) but I've tested it and it is correct
 def get_simulate_tots(V0,injvol,syringe_conc,cell_conc):
 
     injecting_tot = [0]
@@ -45,22 +39,25 @@ def get_simulate_tots(V0,injvol,syringe_conc,cell_conc):
     return injecting_tot,cell_tot
 
 
-def get_dq_list(dg,ddg,dh,ddh,p_initial,l_initial,dh_0,inj_list):
+
+#function that takes in list of model parameters and calculates 
+def get_dq_list(dg,ddg,dh,ddh,p_initial,l_initial,dh_0,inj_list,itc_constants):
+    #unpack constants and convert dG to Kd
+    Kb,T,V0 = itc_constants
     k1 = np.exp(dg/(Kb*T)) 
     k2 = np.exp((dg+ddg)/(Kb*T))
     
     #list of total concentrations 
     pt_list,lt_list = get_simulate_tots(V0,inj_list,p_initial,l_initial)
-
-    
     q_list = []
     
-    ##calculate Q for 
+    ##calculate Q for each injection
     for i in range(len(pt_list)):
         pt = pt_list[i]
         lt = lt_list[i]
         
-        ##root finding. Uses default start point for first couple injections, then uses sol from previous round as start
+        #root finding -- calculates [P] and [L] 
+        #Uses default start point for first couple injections, then uses sol from previous round as start
         if i < 3:
             sol = root(find_p_l,method='lm',x0=(1e-8,1e-8),args=(pt,lt,k1,k2),options={'ftol':1e-20})
         else:
@@ -70,6 +67,7 @@ def get_dq_list(dg,ddg,dh,ddh,p_initial,l_initial,dh_0,inj_list):
         
         #checks that the roots converge to ~0. value at if statement can be changed for stricter or more lenient checks
         #this often fails a couple times during the model's initial search, but corrects itself as walkers move to areas of parameter space that match the isotherm
+        #when no root is found, Q calculations are incorrect, which leads to inflated likelihood
         root_check = pt - pfree - ((pfree*lfree*2)/k1) - ((2*pfree*pfree*lfree)/(k1*k2))
         if root_check > 1e-10:
             print('Could not find root')
@@ -92,19 +90,21 @@ def get_dq_list(dg,ddg,dh,ddh,p_initial,l_initial,dh_0,inj_list):
     return dq_list
 
 
+#build synthetic isotherm using parameters listed in the function. 
 def get_synthetic_itc(seed):
     
     np.random.seed(seed)
-    
-    
+
     ##itc constants
+    ##these will change the isotherm being generated, so when working with synthetic data, they should match the constants in the notebook
     Kb = 0.001987
     T = 273.15 + 25
     V0 = 1.42e-3
+    itc_constants = [Kb,T,V0]
     p_initial_stated = 500e-6
     l_initial_stated = 17e-6
     
-    #kcal units -- these define the values for the synthetic model
+    #kcal units -- these define thermo params for the synthetic model
     dg = -7
     dh = -10
     ddg = -1
@@ -114,25 +114,21 @@ def get_synthetic_itc(seed):
     #ucal units
     sigma = 0.2
     
-
     theta_true = [dg,dh,ddg,ddh,p_initial_stated,l_initial_stated,sigma]
 
     #build injection list -- liter units, currently set to be 1 2 uL injection then 34 10 uL injections
     injection_count = 34
-    injection_vol = 10e-6
-
+    injection_vol = 6e-6
+    
     inj_list_l = [2e-6]
     for i in range(injection_count):
         inj_list_l.append(injection_vol)
     print(inj_list_l)
     
-    
-    
     #total concentrations per injection
     ptot,ltot = get_simulate_tots(V0,inj_list_l,p_initial_stated,l_initial_stated)
-
     #dQ values from get_dq_list function above
-    true_dq = get_dq_list(dg,ddg,dh,ddh,p_initial_stated,l_initial_stated,dh_0,inj_list_l)
+    true_dq = get_dq_list(dg,ddg,dh,ddh,p_initial_stated,l_initial_stated,dh_0,inj_list_l,itc_constants)
     ##add noise to isotherm around gaussian with width of sigma
     dq_obs = true_dq + np.random.normal(loc=0,scale=sigma,size=np.size(true_dq))
     

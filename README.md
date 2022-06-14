@@ -31,8 +31,7 @@ The following variables are adjustable at the top of the notebook:
 \
 `n_steps` - Number of steps taken by each walker. \
 \
-`pt_range` and `lt_range` - width of uniform prior for syringe and cell concentration respectively. The number listed represents a fraction of the stated value, e.g. 0.1 corresponds to a range of ±10%. \
-
+`pt_range` and `lt_range` - width of uniform prior for syringe and cell concentration respectively. The number listed represents a fraction of the stated value, e.g. 0.1 corresponds to a range of ±10%. 
 
 ### Synthetic Data
 By default, the notebook is set up to run on synthetic data built in the `get_synthetic_itc()` function within `itcfunctions.py` Model parameters must be changed from within this function, which is called at the start of the notebook. 

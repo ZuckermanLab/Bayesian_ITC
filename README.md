@@ -25,7 +25,7 @@ The following variables are adjustable at the top of the notebook:
 \
 `filename` - sets the name of the file that the run is saved to using EMCEE's built-in backend. \
 \
-`pt initial` and 'lt initial` - Starting concentrations in the syringe and cell respectively. When modeling synthetic data, these are set up to be taken automatically from the `get_synthetic_itc()` function. When working with experimental data these need to be set manually. \
+`pt initial` and `lt initial` - Starting concentrations in the syringe and cell respectively. When modeling synthetic data, these are set up to be taken automatically from the `get_synthetic_itc()` function. When working with experimental data these need to be set manually. \
 \
 `n_walkers` - Number of individual MCMC chains. Should be at least 3x the number of parameters per EMCEE docs. \
 \

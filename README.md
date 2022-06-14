@@ -16,7 +16,7 @@ The project includes a jupyter notebook `bayesian_itc_notebook.ipynb` for modeli
 
 The main notebook contains everything needed to model calorimetry data two a two-step binding model, and can be run by running each notebook cell.
 
-### Setup options and parmaeters
+### Setup options and parameters
 The following variables are adjustable at the top of the notebook:
 
 `conc_priors` - Boolean for whether concentrations are considered as model parameters. When set to False, model will run with fixed concentrations. When set to True, additional model parameters for each concentration of titrant and titrand will be included. \

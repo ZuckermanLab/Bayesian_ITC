@@ -17,7 +17,7 @@ def find_p_l(variables,pt,lt,k1,k2):
         return abs(equation_1),abs(equation_2)
         
 ##take volumes, initial concs (P0, Ls in bayesitc terms), return list of total concentrations
-##this is stripped more or less directly from bayesitc (nguyen et. al, 2018) but I've tested it and it is correct
+##based on the concentration calculation used in in Nguyen et. al. (2018).
 def get_simulate_tots(V0,injvol,syringe_conc,cell_conc):
 
     injecting_tot = [0]

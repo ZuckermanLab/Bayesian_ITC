@@ -2,7 +2,7 @@
 Notebook for Bayesian analysis of isothermal titration calorimetry using a two-step binding model
 
 ## Manifest
-The project includes a jupyter notebook `bayesian_itc_notebook.ipynb` for modeling of ITC data, as well as a module `itcfunctions.py` of required functions for the model.
+The project includes a jupyter notebook `bayesian_itc_notebook.ipynb` for modeling of ITC data, as well as a module `itcfunctions.py` of required functions for the model. We have additionally included the twelve isotherms that were used in Estelle et al. in the isotherm_data, in both the un-processed form of .itc files that can be read by Origin or Nitpic, and csv files of integrated heats, injection volumes and initial concentrations.
 
 ## Requirements
 - Python 3.4+
@@ -37,4 +37,4 @@ The following variables are adjustable at the top of the notebook:
 By default, the notebook is set up to run on synthetic data built in the `get_synthetic_itc()` function within `itcfunctions.py` Model parameters must be changed from within this function, which is called at the start of the notebook. 
 
 ### Experimental Data
-For modeling experimental data, the line calling `get_synthetic_itc()` in the notebook should be commented out, and the line below calling `get_data()` should be uncommented. Experimental data should take the form of a two-column CSV file, with the integrated heat per injection on the left column, and the injection volume in the right. The units for each are microcalories and microliters respectively. The notebook will also need to be supplied with initial concentrations 
+For modeling experimental data, the line calling `get_synthetic_itc()` in the notebook should be commented out, and the line below calling `get_data()` should be uncommented. Experimental data should take the form of a two-column CSV file, with the integrated heat per injection on the left column, and the injection volume in the right. The units for each are microcalories and microliters respectively. The notebook will also need to be supplied with initial concentrations. For our published isotherms, these can be found in the 'integrated_heats_for_notebook' folder in the repository.

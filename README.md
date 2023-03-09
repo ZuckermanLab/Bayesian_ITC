@@ -2,7 +2,7 @@
 Notebook for Bayesian analysis of isothermal titration calorimetry using a two-step binding model
 
 ## Manifest
-The project includes several jupyter notebooks  for modeling of ITC data. A well-documented example notebook, `bayesian_itc_notebook.ipynb` as well as the module `itcfunctions.py` containing essential functions can be found in the `example_notebook/` folder. Additional models used in Estelle et al., can be found in the model_notebooks folder. We have also included the twelve isotherms that were used in the work in the isotherm_data, in both the un-processed form of .itc files that can be read by Origin or Nitpic, and csv files of integrated heats, injection volumes and initial concentrations.
+The project includes several jupyter notebooks  for modeling of ITC data. A well-documented example notebook, `bayesian_itc_notebook.ipynb` as well as the module `itcfunctions.py` containing essential functions can be found in the `example_notebook/` folder. Additional models used in Estelle et al., can be found in the `model_notebooks` folder. We have also included the twelve isotherms that were used in the work in the isotherm_data, in both the un-processed form of .itc files that can be read by Origin or Nitpic, and csv files of integrated heats, injection volumes and initial concentrations.
 
 ## Requirements
 - Python 3.4+
